@@ -1,18 +1,25 @@
 import pygame, time, os, json
 from settings import *
 import game_functions
-from game_functions import houseCoords,numHouses,roadCoords
+from game_functions import houseCoords, numHouses, roadCoords # edit: added spacing
 
-# check that the save feature works
+# TODO
+# fix construction feature
+# 
+
+# check that the save feature works - save feature works
 # construction feature is not working, can double build and income variable doesnt work
 # can double build
 # cant seem to build a house
 
-pygame.init()
 
-pygame.display.set_caption("City Builder")
-
-SCREEN = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
+if not pygame.get_init():
+    pygame.init()
+    SCREEN = pygame.display.set_mode(
+            (WINDOW_WIDTH, WINDOW_HEIGHT),
+            (pygame.SHOWN, pygame.HWACCEL, pygame.DOUBLEBUF),
+            32)
+    pygame.display.set_caption("City Builder")
 
 constructTextRect = CONSTRUCTTEXT.get_rect()
 
@@ -30,6 +37,9 @@ game_functions.check_save()
 
 menuButtonSelected = [None]
 
+pause = [None]
+
+running = True
 
 def main_menu():
     while pause == True:
@@ -39,16 +49,17 @@ def main_menu():
         SQText = text.render("Save and quit", True, BLACK)
         SQTextRect = SQText.get_rect()
         pygame.draw.rect(SCREEN, WHITE, saveAndQuitButton)
+        """
         if mouse[0] >= 200 and mouse[0] <= 600:
             if mouse[1] >= 600 and mouse[1] <= 650:
                 pygame.draw.rect(SCREEN, DARKWHITE, saveAndQuitButton)
+        """ 
+        # can be shortened to:
+        if mouse[0] in range(200, 600) and mouse[1] in range(600, 650):
+            pygame.draw.rect(SCREEN, DARKWHITE, saveAndQuitButton)
         SQTextRect.center = saveAndQuitButton.center
 
 
-pause = [None]
-
-
-running = True
 while running:
 
     KEYS = pygame.key.get_pressed()
@@ -61,13 +72,11 @@ while running:
     if KEYS[pygame.K_q]:
         running = False
 
-    #gridSquareList = []
-
     game_functions.create_grid()
 
     if CONSTRUCTBUTTON.collidepoint(
-        pygame.mouse.get_pos()[0], pygame.mouse.get_pos()[1]
-    ) and pygame.mouse.get_pressed() == (1, 0, 0):
+        pygame.mouse.get_pos()[0], pygame.mouse.get_pos()[1]) and \
+                pygame.mouse.get_pressed() == (1, 0, 0):
         checkConstructButton[0] = True
         time.sleep(0.25)
 
@@ -80,7 +89,7 @@ while running:
         game_functions.construction_func()
 
     [SCREEN.blit(HOUSEMODELONE, i) for i in houseCoords]
-    [SCREEN.blit(ROADMODELONE, i) for i in roadCoords]
+    [SCREEN.blit(ROADMODELONE,  i) for i in roadCoords]
 
     if KEYS[pygame.K_BACKSPACE]:
         checkConstructButton[0] = None
@@ -95,16 +104,15 @@ while running:
     mouse = pygame.mouse.get_pos()
     SCREEN.blit(menuButton, (720, 0))
     menuButtonRect.topleft = (720, 0)
-    if menuButtonRect.collidepoint(pygame.mouse.get_pos()[0], pygame.mouse.get_pos()[1]) and pygame.mouse.get_pressed() == (1, 0, 0):
+    if menuButtonRect.collidepoint(
+            pygame.mouse.get_pos()[0], pygame.mouse.get_pos()[1]) and \
+            pygame.mouse.get_pressed() == (1, 0, 0):
         time.sleep(0.25)
-        print("e")
         pause[0] = True
 
     # SKILL ISSUE WITH THIS PART
-    if pause[0] == True:
-        print("e")
+    if pause[0]:
         while pause:
-            print("E")
             SCREEN.fill(GREY)
             saveAndQuitButton = pygame.Rect(200, 600, 400, 50)
             text = pygame.font.Font("freesansbold.ttf", 18)
@@ -120,14 +128,18 @@ while running:
     game_functions.tax_the_poor()
     game_functions.count_sec()
 
-    #main_menu()
     pygame.display.update()
 
 print("Number of houses:", numHouses)
 print("INCOME:", INCOME)
 print("Bank:", TREASURY)
 
-SAVEVARIABLES = dict(savedIncome=INCOME,savedTreasury=TREASURY,savedHouses=houseCoords,savedRoads=roadCoords)
+SAVEVARIABLES = {
+    savedIncome: INCOME,
+    savedTreasure: TREASURY,
+    savedHouses: houseCoords,
+    savedRoads: roadCoords
+}
 
 while True:
     save_input = input("Do you want to save? Y/N ")

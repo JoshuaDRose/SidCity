@@ -23,8 +23,6 @@ INCOME = 0
 
 BUILDINGOPTIONS = ["ROADMODELONE", "HOUSEMODELONE"]
 
-
-
 TREASURY = 100
 
 FONTTYPE = pygame.font.Font("freesansbold.ttf", 9)

@@ -15,11 +15,10 @@ from game_functions import houseCoords, numHouses, roadCoords # edit: added spac
 
 if not pygame.get_init():
     pygame.init()
-    SCREEN = pygame.display.set_mode(
-            (WINDOW_WIDTH, WINDOW_HEIGHT),
-            (pygame.SHOWN, pygame.HWACCEL, pygame.DOUBLEBUF),
-            32)
-    pygame.display.set_caption("City Builder")
+
+SCREEN = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT), 0, 32)
+
+pygame.display.set_caption("City Builder")
 
 constructTextRect = CONSTRUCTTEXT.get_rect()
 

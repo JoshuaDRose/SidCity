@@ -12,10 +12,7 @@ from pygame.locals import *
 
 pygame.init()
 
-SCREEN = pygame.display.set_mode(
-        (WINDOW_WIDTH, WINDOW_HEIGHT),
-        (pygame.SHOWN, pygame.HWACCEL, pygame.DOUBLEBUF),
-        32)
+SCREEN = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT), 0, 32)
 
 roadCoords = []
 houseCoords = []

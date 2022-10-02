@@ -5,13 +5,11 @@ from game_functions import houseCoords, numHouses, roadCoords # edit: added spac
 
 # TODO
 # fix construction feature
-# 
 
 # check that the save feature works - save feature works
 # construction feature is not working, can double build and income variable doesnt work
 # can double build
 # cant seem to build a house
-
 
 if not pygame.get_init():
     pygame.init()

@@ -1,10 +1,12 @@
 import pygame, time, os, json
 from settings import *
 import game_functions
-from game_functions import *
+from game_functions import houseCoords,numHouses,roadCoords
 
 # check that the save feature works
 # construction feature is not working, can double build and income variable doesnt work
+# can double build
+# cant seem to build a house
 
 pygame.init()
 
@@ -70,34 +72,15 @@ while running:
         time.sleep(0.25)
 
     if checkConstructButton[0] == True:
-        KEYS = pygame.key.get_pressed()
-        pygame.draw.rect(SCREEN, BLUE, CONSTRUCTBUTTONSELECTED)
-        backspaceTextRect.center = CONSTRUCTBUTTONSELECTED.center
-        instructionTextRect.center = (400, 600)
-        SCREEN.blit(BACKSPACETEXT, backspaceTextRect), SCREEN.blit(INSTRUCTIONTEXT, instructionTextRect)
-        game_functions.cycle_buildings()
-        game_functions.mouse_square()
-        if KEYS[pygame.K_SPACE] and selectedBuilding == BUILDINGOPTIONS[0]:
-            time.sleep(0.25)
-            game_functions.construction_func(given_list=ROADCOORDS, moneyNeeded=10, incomeGenerated=0)
-        elif KEYS[pygame.K_SPACE] and selectedBuilding == BUILDINGOPTIONS[1]:
-            time.sleep(0.25)
-            game_functions.construction_func(
-                given_list=HOUSECOORDS, moneyNeeded=30, incomeGenerated=10
-            )
-        elif selectedBuilding == BUILDINGOPTIONS[0] and not KEYS[pygame.K_SPACE]:
-            game_functions.construction_func(given_list=None, moneyNeeded=10, incomeGenerated=0)
-        elif selectedBuilding == BUILDINGOPTIONS[1] and not KEYS[pygame.K_SPACE]:
-            game_functions.construction_func(given_list=None, moneyNeeded=30, incomeGenerated=10)
-        else:
-            game_functions.construction_func(given_list=None, moneyNeeded=None, incomeGenerated=None)
 
-    HOUSECOORDS = list(dict.fromkeys(HOUSECOORDS))
-    for x, y in HOUSECOORDS:
-        SCREEN.blit(HOUSEMODELONE, (x, y))
-    ROADCOORDS = list(dict.fromkeys(ROADCOORDS))
-    for x, y in ROADCOORDS:
-        SCREEN.blit(ROADMODELONE, (x, y))
+        game_functions.cycle_buildings()
+
+        game_functions.mouse_square()
+
+        game_functions.construction_func()
+
+    [SCREEN.blit(HOUSEMODELONE, i) for i in houseCoords]
+    [SCREEN.blit(ROADMODELONE, i) for i in roadCoords]
 
     if KEYS[pygame.K_BACKSPACE]:
         checkConstructButton[0] = None
@@ -144,7 +127,7 @@ print("Number of houses:", numHouses)
 print("INCOME:", INCOME)
 print("Bank:", TREASURY)
 
-SAVEVARIABLES = dict(savedIncome=INCOME,savedTreasury=TREASURY,savedHouses=HOUSECOORDS,savedRoads=ROADCOORDS)
+SAVEVARIABLES = dict(savedIncome=INCOME,savedTreasury=TREASURY,savedHouses=houseCoords,savedRoads=roadCoords)
 
 while True:
     save_input = input("Do you want to save? Y/N ")
